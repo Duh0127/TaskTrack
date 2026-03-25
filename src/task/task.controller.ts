@@ -35,6 +35,18 @@ export class TaskController {
     return this.taskService.findOne(+id);
   }
 
+  @Post('/check/:id')
+  @UseGuards(AuthGuard)
+  checkTask(@Param('id') id: string) {
+    return this.taskService.checkTask(+id);
+  }
+
+  @Post('/uncheck/:id')
+  @UseGuards(AuthGuard)
+  uncheckTask(@Param('id') id: string) {
+    return this.taskService.uncheckTask(+id);
+  }
+
   @Patch(':id')
   @UseGuards(AuthGuard)
   update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {

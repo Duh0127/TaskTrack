@@ -64,6 +64,7 @@ export class UserService {
           name: true,
           email: true,
           tasks: {
+            where: { checked: false },
             select: {
               id: true,
               title: true,
@@ -96,6 +97,7 @@ export class UserService {
           name: true,
           email: true,
           tasks: {
+            where: { checked: false },
             select: {
               id: true,
               title: true,
@@ -139,6 +141,7 @@ export class UserService {
           name: true,
           email: true,
           tasks: {
+            where: { checked: false },
             select: {
               id: true,
               title: true,

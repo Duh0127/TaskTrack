@@ -64,6 +64,74 @@ export class TaskService {
     }
   }
 
+  async checkTask(id: number) {
+    if (!Number.isInteger(id) || id <= 0) {
+      throw new BadRequestException('Id da tarefa inválido');
+    }
+
+    const task = await this.prisma.task.findUnique({
+      where: { id: id },
+      select: { id: true },
+    });
+    if (!task) throw new NotFoundException('Tarefa não encontrada');
+
+    try {
+      return await this.prisma.task.update({
+        data: {
+          checked: true,
+          updatedAt: new Date(),
+        },
+        where: { id: id },
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          checked: true,
+          updatedAt: true,
+        },
+      });
+    } catch (error) {
+      console.error('Erro ao concluir a tarefa', error);
+      throw new InternalServerErrorException(
+        'Erro interno ao concluir a tarefa',
+      );
+    }
+  }
+
+  async uncheckTask(id: number) {
+    if (!Number.isInteger(id) || id <= 0) {
+      throw new BadRequestException('Id da tarefa invalido');
+    }
+
+    const task = await this.prisma.task.findUnique({
+      where: { id: id },
+      select: { id: true },
+    });
+    if (!task) throw new NotFoundException('Tarefa não encontrada');
+
+    try {
+      return await this.prisma.task.update({
+        data: {
+          checked: false,
+          updatedAt: new Date(),
+        },
+        where: { id: id },
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          checked: true,
+          updatedAt: true,
+        },
+      });
+    } catch (error) {
+      console.error('Erro ao desmarcar a tarefa', error);
+      throw new InternalServerErrorException(
+        'Erro interno ao desmarcar a tarefa',
+      );
+    }
+  }
+
   async update(id: number, updateTaskDto: UpdateTaskDto) {
     if (!Number.isInteger(id) || id <= 0) {
       throw new BadRequestException('Id da tarefa invalido');
