@@ -43,6 +43,10 @@ export class AuthService {
     });
     if (user) throw new ForbiddenException('Este usuário já possui cadastro');
 
+    const salt = await bcrypt.genSalt(15);
+    const hashedPass = await bcrypt.hash(credentials.password, salt);
+    credentials.password = hashedPass;
+
     const newUser = await this.prisma.user.create({
       data: credentials,
       select: {
